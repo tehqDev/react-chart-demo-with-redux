@@ -6,6 +6,9 @@ export const getAllStocks = (store) =>
 export const getCurrentStock = (store) =>
   getStocksState(store) ? getStocksState(store).currentStock : {};
 
+export const getCurrentUserStock = (store) =>
+  getStocksState(store) ? getStocksState(store).currentUserStock : {};
+
 export const getUserCash = (store) =>
   getStocksState(store) ? getStocksState(store).user.cash : {};
 
@@ -22,3 +25,4 @@ export const getSelectedTab = (store) =>
 
 export const getUserStocks = (store) =>
   getStocksState(store) ? getStocksState(store).user_stock_data : [];
+

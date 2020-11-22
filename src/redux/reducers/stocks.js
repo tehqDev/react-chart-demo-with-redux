@@ -1,9 +1,12 @@
 import {
+  BUY_STOCK,
   NEXT_DAY,
   SELECT_STOCK,
+  SELECT_USER_STOCK,
   SET_SELECTED_TAB,
   SET_STOCKS,
   UPDATE_STOCKS,
+  UPDATE_USER_STOCKS,
   USER_WORK
 } from "../actionTypes";
 
@@ -96,6 +99,7 @@ const initialStocks = generateStocks(numberOfStocks);
 const initialState = {
   stock_data: initialStocks,
   currentStock: initialStocks && initialStocks[0],
+  currentUserStock: {},
   user_stock_data: [],
   user: {
     cash: startingCash
@@ -106,7 +110,7 @@ const initialState = {
 };
 
 export default function (state = initialState, action) {
-  //console.log(action.type);
+  console.log(action.type);
   switch (action.type) {
     case SET_STOCKS: {
       const { stocks } = action.payload;
@@ -127,9 +131,23 @@ export default function (state = initialState, action) {
       const { stockId } = action.payload;
       return {
         ...state,
-        currentStock: state.stock_data.find((x) => x.id === stockId),
-        stock_data: state.stock_data.map((stock) => {
+        currentStock: state.stock_data?.find((x) => x.id === stockId),
+        stock_data: state.stock_data?.map((stock) => {
           return stock.id === stockId
+            ? { ...stock, isSelected: true }
+            : { ...stock, isSelected: false };
+        })
+      };
+    }
+    case SELECT_USER_STOCK: {
+      const { stockTicker } = action.payload;
+      return {
+        ...state,
+        currentUserStock: state.user_stock_data.find(
+          (x) => x.ticker === stockTicker
+        ),
+        user_stock_data: state.user_stock_data.map((stock) => {
+          return stock.ticker === stockTicker
             ? { ...stock, isSelected: true }
             : { ...stock, isSelected: false };
         })
@@ -183,6 +201,63 @@ export default function (state = initialState, action) {
       return {
         ...state,
         selectedTab: targetTab
+      };
+    }
+
+    case UPDATE_USER_STOCKS: {
+      const newUserStockData = state.user_stock_data.map((stock) => {
+        const realTimeValue = state.stock_data.find(
+          (realStock) => realStock.ticker === stock.ticker
+        );
+
+        if (realTimeValue) {
+          return {
+            ...stock,
+            TotalValue: (
+              stock.totalShares * realTimeValue.costPerShare
+            ).toFixed(2)
+          };
+        } else {
+          return stock;
+        }
+      });
+
+      return {
+        ...state,
+        user_stock_data: newUserStockData
+      };
+    }
+
+    case BUY_STOCK: {
+      const { stock, sharesToBuy } = action.payload;
+      const purchaseDate = stock.totalDays;
+
+      const doesExist = state.user_stock_data.some(
+        (x) => x.ticker === stock.ticker
+      );
+
+      // add new
+      if (!doesExist) {
+        state.user_stock_data.push({
+          id: stock.id,
+          purchaseDate: purchaseDate,
+          ticker: stock.ticker,
+          totalShares: 0,
+          costPerShare: stock.costPerShare
+        });
+      }
+
+      return {
+        ...state,
+        user_stock_data: state.user_stock_data.map((userStock) => {
+          if (userStock.ticker === stock.ticker) {
+            return {
+              ...userStock,
+              totalShares: userStock.totalShares + sharesToBuy
+            };
+          }
+          return userStock;
+        })
       };
     }
     default:

@@ -29,8 +29,8 @@ const AllStocks = ({ stocks }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  const allStocks = getAllStocks(state);
+const mapStateToProps = (store) => {
+  const allStocks = getAllStocks(store);
   return { stocks: allStocks };
 };
 

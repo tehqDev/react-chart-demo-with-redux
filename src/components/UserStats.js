@@ -14,17 +14,16 @@ const StyledUserStats = styled.div`
   flex-direction: column;
 `;
 
-const UserStats = ({ userCash, stockProfitPercent }) => {
+const UserStats = ({ userCash }) => {
   return (
     <StyledUserStats>
       <div>Total: ${userCash}</div>
-      <div>Today's Profit: {stockProfitPercent}%</div>
     </StyledUserStats>
   );
 };
 
-const mapStateToProps = (state) => {
-  const userCash = getUserCash(state);
+const mapStateToProps = (store) => {
+  const userCash = getUserCash(store);
   return {
     userCash: userCash
   };

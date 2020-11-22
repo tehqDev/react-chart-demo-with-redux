@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Stock from "./Stock";
+import UserPurchase from "../components/UserPurchase";
 
 import { connect } from "react-redux";
 import { getUserStocks } from "../redux/selectors";
@@ -22,15 +22,15 @@ const UserStocks = ({ stocks }) => {
   return (
     <StyledUserStocks>
       {stocks.map((stock, index) => {
-        return <Stock key={index} stock={stock} />;
+        return <UserPurchase key={index} stock={stock} />;
       })}
       ..userStocks
     </StyledUserStocks>
   );
 };
 
-const mapStateToProps = (state) => {
-  const userStocks = getUserStocks(state);
+const mapStateToProps = (store) => {
+  const userStocks = getUserStocks(store);
   return { stocks: userStocks };
 };
 

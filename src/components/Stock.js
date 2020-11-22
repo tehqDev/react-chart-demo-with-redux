@@ -2,12 +2,13 @@ import React from "react";
 import styled from "styled-components";
 
 import { connect } from "react-redux";
-import { selectStock } from "../redux/actions";
+import { selectStock, buyStock, selectUserStock, updateUserStocks } from "../redux/actions";
 
 const StyledStock = styled.div`
   display: flex;
   flex-direction: column;
   margin: 10px;
+  padding: 10px;
   width: 100%;
   height: 100%;
   align-items: center;
@@ -17,7 +18,7 @@ const StyledStock = styled.div`
   background: ${({ isSelected }) => (isSelected ? "lightblue" : "white")};
 `;
 
-const Stock = ({ stock, selectStock }) => {
+const Stock = ({ stock, selectStock, buyStock, updateUserStocks }) => {
   return (
     <StyledStock
       isSelected={stock.isSelected}
@@ -25,21 +26,17 @@ const Stock = ({ stock, selectStock }) => {
     >
       <div>{stock.ticker}</div>
       <div>${stock.costPerShare}</div>
-      <div>Total Shares: {stock.totalShares}</div>
-      {/* <div>
-        {stock.shareHistory
-          .sort((x) => -x.day)
-          .map((stockInfo, index) => {
-            return (
-              <div key={index}>
-                Price: ${stockInfo.costPerShare}
-                Day: {stockInfo.day}
-              </div>
-            );
-          })}
-      </div> */}
+      <div>Total Shares: {stock.totalShares.toLocaleString()}</div>
+      <button
+        onClick={() => {
+          buyStock(stock);
+          updateUserStocks();
+        }}
+      >
+        Buy
+      </button>
     </StyledStock>
   );
 };
 
-export default connect(null, { selectStock })(Stock);
+export default connect(null, { selectStock, buyStock, selectUserStock, updateUserStocks })(Stock);

@@ -4,7 +4,10 @@ import {
   USER_WORK,
   UPDATE_STOCKS,
   NEXT_DAY,
-  SET_SELECTED_TAB
+  SET_SELECTED_TAB,
+  BUY_STOCK,
+  SELECT_USER_STOCK,
+  UPDATE_USER_STOCKS
 } from "./actionTypes";
 
 export const setStocks = (stocks) => ({
@@ -15,6 +18,11 @@ export const setStocks = (stocks) => ({
 export const selectStock = (stockId) => ({
   type: SELECT_STOCK,
   payload: { stockId }
+});
+
+export const selectUserStock = (stockTicker) => ({
+  type: SELECT_USER_STOCK,
+  payload: { stockTicker }
 });
 
 export const userWork = () => ({
@@ -35,4 +43,14 @@ export const nextDay = () => ({
 export const setSelectedTab = (targetTab) => ({
   type: SET_SELECTED_TAB,
   payload: { targetTab }
+});
+
+export const buyStock = (stock) => ({
+  type: BUY_STOCK,
+  payload: { stock: stock, sharesToBuy: 1 } // todo
+});
+
+export const updateUserStocks = () => ({
+  type: UPDATE_USER_STOCKS,
+  payload: {}
 });

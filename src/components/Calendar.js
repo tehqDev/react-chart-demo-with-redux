@@ -33,7 +33,7 @@ const Calendar = ({ week, totalDays }) => {
   return (
     <div>
       <StyledCalendar>
-        {week.map((day, index) => {
+        {week?.map((day, index) => {
           return day.CurrentDay ? (
             <CurrentDay key={index}>{day.Day}</CurrentDay>
           ) : (

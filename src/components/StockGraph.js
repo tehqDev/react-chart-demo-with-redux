@@ -25,7 +25,7 @@ const StockGraph = ({ ticker, currentStock, totalDays }) => {
   });
 
   const chartMax = totalDays + 15;
-  const chartMin = Math.floor(chartMax - 30, 0);
+  const chartMin = Math.floor(chartMax - 30, 0); // todo: settings
 
   return (
     <StyledStockGraph>
@@ -38,7 +38,7 @@ const StockGraph = ({ ticker, currentStock, totalDays }) => {
           colors={["#40ed60", "#40ed60"]}
           xtitle="Total Days"
           ytitle="$ Per Share"
-          label={ticker}
+          label={ticker && ticker}
           data={chartData}
         />
       </div>
@@ -50,7 +50,7 @@ const mapStateToProps = (store) => {
   const totalDays = getTotalDays(store);
   const currentStock = getCurrentStock(store);
   return {
-    ticker: currentStock.ticker,
+    ticker: currentStock?.ticker,
     currentStock: currentStock,
     totalDays: totalDays
   };

@@ -8,7 +8,13 @@ import StockNav from "./StockNav";
 import { Tabs } from "../redux/constants";
 
 import { connect } from "react-redux";
-import { updateStocks, userWork, nextDay, selectStock } from "../redux/actions";
+import {
+  updateStocks,
+  userWork,
+  nextDay,
+  selectStock,
+  updateUserStocks
+} from "../redux/actions";
 import {
   getWeek,
   getTotalDays,
@@ -36,9 +42,9 @@ const App = ({
   updateStocks,
   selectedTab,
   currentStock,
-  selectStock
+  selectStock,
+  updateUserStocks
 }) => {
-  const stockProfitPercent = 10.0;
   return (
     <StyledApp>
       <StockGraph />
@@ -48,12 +54,13 @@ const App = ({
           updateStocks(Number(totalDays) + 1);
           nextDay();
           selectStock(currentStock.id);
+          updateUserStocks();
         }}
       >
         Work
       </StyledWorkButton>
       <Calendar week={week} totalDays={totalDays} />
-      <UserStats stockProfitPercent={stockProfitPercent} />
+      <UserStats />
 
       <StockNav />
       {Tabs[selectedTab]}
@@ -78,5 +85,6 @@ export default connect(mapStateToProps, {
   userWork,
   updateStocks,
   nextDay,
-  selectStock
+  selectStock,
+  updateUserStocks
 })(App);
